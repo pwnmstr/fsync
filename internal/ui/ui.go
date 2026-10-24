@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 
@@ -22,16 +21,15 @@ type AppUI struct {
 	SyncSvc     *sync.SyncService
 }
 
-func NewAppUI(cfg *config.AppConfig, discSvc *discovery.DiscoveryService, syncSvc *sync.SyncService) *AppUI {
-	a := app.New()
+func NewAppUI(a fyne.App, cfg *config.AppConfig, discSvc *discovery.DiscoveryService, syncSvc *sync.SyncService) *AppUI {
 	w := a.NewWindow("File Sync")
 
 	return &AppUI{
-		App:         a,
-		Window:      w,
-		Cfg:         cfg,
+		App:          a,
+		Window:       w,
+		Cfg:          cfg,
 		DiscoverySvc: discSvc,
-		SyncSvc:     syncSvc,
+		SyncSvc:      syncSvc,
 	}
 }
 

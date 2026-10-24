@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"fyne.io/fyne/v2/app"
 	"filesync/internal/config"
 	"filesync/internal/discovery"
 	"filesync/internal/sync"
@@ -11,7 +13,12 @@ import (
 )
 
 func main() {
-	cfgPath := "config.json"
+	a := app.NewWithID("com.example.filesync")
+
+	// Safe writable path on both Linux and Android
+	storageDir := a.Storage().RootURI().Path()
+	cfgPath := filepath.Join(storageDir, "config.json")
+
 	cfg, err := config.LoadConfig(cfgPath)
 	if err != nil {
 		fmt.Printf("Error loading config: %v\n", err)
@@ -29,6 +36,6 @@ func main() {
 	syncSvc.StartServer(discovery.SyncPort)
 	defer syncSvc.StopServer()
 
-	appUI := ui.NewAppUI(cfg, discSvc, syncSvc)
+	appUI := ui.NewAppUI(a, cfg, discSvc, syncSvc)
 	appUI.Run()
 }
